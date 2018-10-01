@@ -26,10 +26,14 @@ class LoadBitmap extends LoadBitmapEmitter implements FutureCallback<Response<By
 
     @Override
     public void onCompleted(Exception e, final Response<ByteBufferList> response) {
-        if (e == null)
+        if (e == null && response != null) {
             e = response.getException();
+        }
         if (e != null) {
             report(e, null);
+            return;
+        } else if (response == null) {
+            report(new Exception(), null);
             return;
         }
         final ByteBufferList result = response.getResult();
